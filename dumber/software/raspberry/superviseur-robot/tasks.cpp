@@ -286,11 +286,24 @@ void Tasks::ReceiveFromMonTask(void *arg) {
         msgRcv = monitor.Read();
         cout << "Rcv <= " << msgRcv->ToString() << endl << flush;
 
-// ********************** //
-// ***FONCTIONNALITE 5*** //
-// ********************** //
+// ************************* //
+// ***FONCTIONNALITES 5/6*** //
+// ************************* //
         if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {  // Connexion perdue avec le monitor
             delete(msgRcv);
+            
+            // Stopper le Robot
+            cout << "Robot stop" << endl;
+            move = MESSAGE_ROBOT_STOP;
+            
+            // Stopper la com avec le Robot
+    
+            // Fermer le serveur 
+            
+            // Eteindre la camera
+            
+            sleep(5);
+            
             exit(-1);
         } else if (msgRcv->CompareID(MESSAGE_ROBOT_COM_OPEN)) {
             rt_sem_v(&sem_openComRobot);

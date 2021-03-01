@@ -9,9 +9,8 @@
         <group>
             <file>file:/home/choulot/Bureau/4AE_S2/TR/Projet_TempsReel/dumber/software/raspberry/superviseur-robot/tasks.cpp</file>
             <file>file:/home/choulot/Bureau/4AE_S2/TR/Projet_TempsReel/dumber/software/raspberry/superviseur-robot/tasks.h</file>
-            <file>file:/home/choulot/Bureau/4AE_S2/TR/Projet_TempsReel/dumber/software/raspberry/superviseur-robot/lib/camera.cpp</file>
             <file>file:/home/choulot/Bureau/4AE_S2/TR/Projet_TempsReel/dumber/software/raspberry/superviseur-robot/main.cpp</file>
-            <file>file:/home/choulot/Bureau/4AE_S2/TR/Projet_TempsReel/dumber/software/raspberry/superviseur-robot/lib/camera.h</file>
+            <file>file:/home/choulot/Bureau/4AE_S2/TR/Projet_TempsReel/dumber/software/raspberry/superviseur-robot/lib/commonitor.cpp</file>
         </group>
     </open-files>
 </project-private>
