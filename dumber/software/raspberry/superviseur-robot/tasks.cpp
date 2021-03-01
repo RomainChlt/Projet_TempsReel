@@ -73,6 +73,13 @@ void Tasks::Init() {
         cerr << "Error mutex create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //   
+    if (err = rt_mutex_create(&mutex_cameraStarted, NULL)) {
+        cerr << "Error mutex create: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
     cout << "Mutexes created successfully" << endl << flush;
 
     /**************************************************************************************/
@@ -91,6 +98,13 @@ void Tasks::Init() {
         exit(EXIT_FAILURE);
     }
     if (err = rt_sem_create(&sem_startRobot, NULL, 0, S_FIFO)) {
+        cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //   
+    if (err = rt_sem_create(&sem_startCamera, NULL, 0, S_FIFO)) {
         cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
@@ -120,6 +134,13 @@ void Tasks::Init() {
         exit(EXIT_FAILURE);
     }
     if (err = rt_task_create(&th_move, "th_move", 0, PRIORITY_TMOVE, 0)) {
+        cerr << "Error task create: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //
+    if (err = rt_task_create(&th_startCamera, "th_startCamera", 0, PRIORITY_TCAMERA, 0)) {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
@@ -167,7 +188,13 @@ void Tasks::Run() {
         cerr << "Error task start: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
-
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //
+    if (err = rt_task_start(&th_startCamera, (void(*)(void*)) & Tasks::StartCameraTask, this)) {
+        cerr << "Error task start: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
     cout << "Tasks launched" << endl << flush;
 }
 
@@ -259,7 +286,10 @@ void Tasks::ReceiveFromMonTask(void *arg) {
         msgRcv = monitor.Read();
         cout << "Rcv <= " << msgRcv->ToString() << endl << flush;
 
-        if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {
+// ********************** //
+// ***FONCTIONNALITE 5*** //
+// ********************** //
+        if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {  // Connexion perdue avec le monitor
             delete(msgRcv);
             exit(-1);
         } else if (msgRcv->CompareID(MESSAGE_ROBOT_COM_OPEN)) {
@@ -382,6 +412,27 @@ void Tasks::MoveTask(void *arg) {
         cout << endl << flush;
     }
 }
+
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //
+void Tasks::StartCameraTask(void* arg) {
+    cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
+    // Synchronization barrier (waiting that all tasks are starting)
+    rt_sem_p(&sem_barrier, TM_INFINITE);
+    
+    /*************************************************************************************/
+    /* The task startCamera starts here                                                  */
+    /*************************************************************************************/
+
+    /*while (1) {
+        cout << "Starting Camera" << endl;
+        
+        //if (Camera.Open()) cout << "Camera Started !" << endl;
+        //else cout << "Starting of camera failed" << endl;
+    }*/
+}
+
 
 /**
  * Write a message in a given queue
