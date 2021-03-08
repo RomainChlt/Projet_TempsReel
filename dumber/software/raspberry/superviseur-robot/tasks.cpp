@@ -284,7 +284,7 @@ void Tasks::ReceiveFromMonTask(void *arg) {
 
     while (1) {
         msgRcv = monitor.Read();
-        cout << "Rcv <= " << msgRcv->ToString() << endl << flush;
+        cout << endl << "Rcv <= " << msgRcv->ToString() << endl << flush;
 
 // ************************* //
 // ***FONCTIONNALITES 5/6*** //
@@ -297,18 +297,26 @@ void Tasks::ReceiveFromMonTask(void *arg) {
             move = MESSAGE_ROBOT_STOP;
             
             // Stopper la com avec le Robot
-            robot.Close();
-            robot.~ComRobot();
+            cout << "Monitor close" << endl;
             monitor.Close();
-            monitor.~ComMonitor();
+            //robot.Close();
+            //robot.~ComRobot();
+            //monitor.Close();
+            //monitor.~ComMonitor();
 
             // Fermer le serveur 
-            ServerTask(close);
-
+            
+            
             // Eteindre la camera
+            //camera.Close();
             
-            sleep(5);
-            
+            // Sleep & exit
+            sleep(2);
+            cout << endl;
+            cout << "#####################################" << endl;
+            cout << "Monitor Lost - End of function - Stop" << endl;
+            cout << "#####################################" << endl;
+            robot.Close();
             exit(-1);
         } else if (msgRcv->CompareID(MESSAGE_ROBOT_COM_OPEN)) {
             rt_sem_v(&sem_openComRobot);
@@ -435,10 +443,10 @@ void Tasks::MoveTask(void *arg) {
 // ***FONCTIONNALITE 14*** //
 // *********************** //
 void Tasks::StartCameraTask(void* arg) {
-    cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
+    /*cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
     // Synchronization barrier (waiting that all tasks are starting)
     rt_sem_p(&sem_barrier, TM_INFINITE);
-    
+    */
     /*************************************************************************************/
     /* The task startCamera starts here                                                  */
     /*************************************************************************************/
