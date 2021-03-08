@@ -291,15 +291,20 @@ void Tasks::ReceiveFromMonTask(void *arg) {
 // ************************* //
         if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {  // Connexion perdue avec le monitor
             delete(msgRcv);
-            
+
             // Stopper le Robot
             cout << "Robot stop" << endl;
             move = MESSAGE_ROBOT_STOP;
             
             // Stopper la com avec le Robot
-    
+            robot.Close();
+            robot.~ComRobot();
+            monitor.Close();
+            monitor.~ComMonitor();
+
             // Fermer le serveur 
-            
+            ServerTask(close);
+
             // Eteindre la camera
             
             sleep(5);
