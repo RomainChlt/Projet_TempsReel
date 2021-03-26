@@ -109,20 +109,8 @@ int ComMonitor::Open(int port) {
  * Close socket and server
  */
 void ComMonitor::Close() {
-    
-// ********************** //
-// ***FONCTIONNALITE 6*** //
-// ********************** //
-    // Stopper le Robot
-    
-    // Stopper la com avec le Robot
-    
-    // Fermer le serveur    
     close(socketFD);
-    socketFD = -1;
-    
-    // Deconnecter la camera
-    
+    socketFD = -1;    
 }
 
 /**

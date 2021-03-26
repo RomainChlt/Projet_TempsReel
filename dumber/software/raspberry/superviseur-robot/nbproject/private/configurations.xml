@@ -41,7 +41,11 @@
     </conf>
     <conf name="Debug__RPI_" type="1">
       <toolsSet>
+<<<<<<< HEAD
         <developmentServer>pi@10.105.1.05:22</developmentServer>
+=======
+        <developmentServer>pi@10.105.1.13:22</developmentServer>
+>>>>>>> Romain
         <platform>2</platform>
       </toolsSet>
       <dbx_gdbdebugger version="1">
