@@ -76,11 +76,8 @@ private:
     RT_TASK th_receiveFromMon;
     RT_TASK th_openComRobot;
     RT_TASK th_startRobot;
-<<<<<<< HEAD
     RT_TASK th_startRobotWD;
     RT_TASK th_reloadWD;   
-=======
->>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
     RT_TASK th_startCamera;
     RT_TASK th_move;
     RT_TASK th_checkBat;
@@ -93,10 +90,7 @@ private:
     RT_MUTEX mutex_robot;
     RT_MUTEX mutex_robotStarted;
     RT_MUTEX mutex_move;
-<<<<<<< HEAD
     RT_MUTEX mutex_ComRobotEtablie;
-=======
->>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
     RT_MUTEX mutex_cameraStarted;
 
     /**********************************************************************/
@@ -106,14 +100,10 @@ private:
     RT_SEM sem_openComRobot;
     RT_SEM sem_serverOk;
     RT_SEM sem_startRobot;
-<<<<<<< HEAD
     RT_SEM sem_commRobLost;
     RT_SEM sem_startCamera;
     RT_SEM sem_startRobotWD;
     RT_SEM sem_reloadWD;
-=======
-    RT_SEM sem_startCamera;
->>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
 
     /**********************************************************************/
     /* Message queues                                                     */
@@ -164,7 +154,6 @@ private:
      * @brief Thread handling control of the robot.
      */
     void MoveTask(void *arg);
-<<<<<<< HEAD
 
     /**
      * @brief Thread handling lost of control of the robot.
@@ -177,12 +166,6 @@ private:
      */
     void CheckBat (void *arg);
    
-=======
-   
-// *********************** //
-// ***FONCTIONNALITE 14*** //
-// *********************** //
->>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
     /**
      * @brief Thread starting the camera.
      */
