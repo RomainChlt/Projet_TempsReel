@@ -66,6 +66,7 @@ private:
     ComRobot robot;
     int robotStarted = 0;
     int move = MESSAGE_ROBOT_STOP;
+    int ComRobotEtablie=0;
     
     /**********************************************************************/
     /* Tasks                                                              */
@@ -77,6 +78,8 @@ private:
     RT_TASK th_startRobot;
     RT_TASK th_startCamera;
     RT_TASK th_move;
+    RT_TASK th_checkBat;
+    RT_TASK th_commRobLost;
     
     /**********************************************************************/
     /* Mutex                                                              */
@@ -85,6 +88,7 @@ private:
     RT_MUTEX mutex_robot;
     RT_MUTEX mutex_robotStarted;
     RT_MUTEX mutex_move;
+    RT_MUTEX mutex_ComRobotEtablie;
     RT_MUTEX mutex_cameraStarted;
 
     /**********************************************************************/
@@ -94,6 +98,7 @@ private:
     RT_SEM sem_openComRobot;
     RT_SEM sem_serverOk;
     RT_SEM sem_startRobot;
+    RT_SEM sem_commRobLost;
     RT_SEM sem_startCamera;
 
     /**********************************************************************/
