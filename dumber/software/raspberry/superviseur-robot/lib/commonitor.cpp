@@ -110,8 +110,7 @@ int ComMonitor::Open(int port) {
  */
 void ComMonitor::Close() {
     close(socketFD);
-
-    socketFD = -1;
+    socketFD = -1;    
 }
 
 /**

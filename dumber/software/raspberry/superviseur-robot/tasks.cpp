@@ -78,10 +78,13 @@ void Tasks::Init() {
         cerr << "Error mutex create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
+<<<<<<< HEAD
     if (err = rt_mutex_create(&mutex_ComRobotEtablie, NULL)) {
         cerr << "Error mutex create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
+=======
+>>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
 // *********************** //
 // ***FONCTIONNALITE 14*** //
 // *********************** //   
@@ -122,10 +125,20 @@ void Tasks::Init() {
         cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE); 
     }
+<<<<<<< HEAD
     if (err = rt_sem_create(&sem_reloadWD, NULL, 0, S_FIFO)) {
         cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE); 
     }    
+=======
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //   
+    if (err = rt_sem_create(&sem_startCamera, NULL, 0, S_FIFO)) {
+        cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
+>>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
     cout << "Semaphores created successfully" << endl << flush;
 
     /**************************************************************************************/
@@ -163,6 +176,7 @@ void Tasks::Init() {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
+<<<<<<< HEAD
     if (err = rt_task_create(&th_checkBat, "th_checkBat", 0, PRIORITY_TCHECKBAT, 0)) {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
@@ -171,6 +185,11 @@ void Tasks::Init() {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
+=======
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //
+>>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
     if (err = rt_task_create(&th_startCamera, "th_startCamera", 0, PRIORITY_TCAMERA, 0)) {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
@@ -242,7 +261,13 @@ void Tasks::Run() {
         cerr << "Error task start: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
-
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //
+    if (err = rt_task_start(&th_startCamera, (void(*)(void*)) & Tasks::StartCameraTask, this)) {
+        cerr << "Error task start: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
     cout << "Tasks launched" << endl << flush;
 }
 
@@ -334,6 +359,12 @@ void Tasks::ReceiveFromMonTask(void *arg) {
         msgRcv = monitor.Read();
         cout << endl << "Rcv <= " << msgRcv->ToString() << endl << flush;
 
+<<<<<<< HEAD
+=======
+// ************************* //
+// ***FONCTIONNALITES 5/6*** //
+// ************************* //
+>>>>>>> 464d74a3de6aff05acf09c1f7517c79eaf00f863
         if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {  // Connexion perdue avec le monitor
             delete(msgRcv);
 
@@ -588,6 +619,27 @@ void Tasks::MoveTask(void *arg) {
         cout<< endl << flush;
     }
 }
+
+// *********************** //
+// ***FONCTIONNALITE 14*** //
+// *********************** //
+void Tasks::StartCameraTask(void* arg) {
+    /*cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
+    // Synchronization barrier (waiting that all tasks are starting)
+    rt_sem_p(&sem_barrier, TM_INFINITE);
+    */
+    /*************************************************************************************/
+    /* The task startCamera starts here                                                  */
+    /*************************************************************************************/
+
+    /*while (1) {
+        cout << "Starting Camera" << endl;
+        
+        //if (Camera.Open()) cout << "Camera Started !" << endl;
+        //else cout << "Starting of camera failed" << endl;
+    }*/
+}
+
 
 /**
  * Write a message in a given queue
