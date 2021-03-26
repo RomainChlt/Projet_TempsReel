@@ -154,10 +154,18 @@ private:
      * @brief Thread handling control of the robot.
      */
     void MoveTask(void *arg);
+
+    /**
+     * @brief Thread handling lost of control of the robot.
+     */
+    void CommRobLost (void *arg);
+
+
+    /**
+     * @brief Thread handling battery checking.
+     */
+    void CheckBat (void *arg);
    
-// *********************** //
-// ***FONCTIONNALITE 14*** //
-// *********************** //
     /**
      * @brief Thread starting the camera.
      */
