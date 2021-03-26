@@ -78,8 +78,6 @@ void Tasks::Init() {
         cerr << "Error mutex create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
-<<<<<<< HEAD
-=======
     if (err = rt_mutex_create(&mutex_ComRobotEtablie, NULL)) {
         cerr << "Error mutex create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
@@ -91,7 +89,6 @@ void Tasks::Init() {
         cerr << "Error mutex create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
->>>>>>> Romain
     cout << "Mutexes created successfully" << endl << flush;
 
     /**************************************************************************************/
@@ -113,15 +110,15 @@ void Tasks::Init() {
         cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE); 
     }
-<<<<<<< HEAD
     if (err = rt_sem_create(&sem_startRobotWD, NULL, 0, S_FIFO)) {
-=======
+        cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }         
     if (err = rt_sem_create(&sem_commRobLost, NULL, 0, S_FIFO)) {
         cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     } 
     if (err = rt_sem_create(&sem_startCamera, NULL, 0, S_FIFO)) {
->>>>>>> Romain
         cerr << "Error semaphore create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE); 
     }
@@ -158,23 +155,23 @@ void Tasks::Init() {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
-<<<<<<< HEAD
     if (err = rt_task_create(&th_reloadWD, "th_reloadWD", 0, PRIORITY_TRELOADWD, 0)) {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }    
     if (err = rt_task_create(&th_move, "th_move", 0, PRIORITY_TMOVE, 0)) {
-=======
+        cerr << "Error task create: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
     if (err = rt_task_create(&th_checkBat, "th_checkBat", 0, PRIORITY_TCHECKBAT, 0)) {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
-          exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     if (err = rt_task_create(&th_commRobLost, "th_commRobLost", 0,PRIORITY_COMMROBLOST, 0)) {
         cerr << "Error task create: " << strerror(-err) << endl << flush;
-          exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     if (err = rt_task_create(&th_startCamera, "th_startCamera", 0, PRIORITY_TCAMERA, 0)) {
->>>>>>> Romain
         cerr << "Error task create: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
@@ -222,9 +219,10 @@ void Tasks::Run() {
         cerr << "Error task start: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
-<<<<<<< HEAD
     if (err = rt_task_start(&th_reloadWD, (void(*)(void*)) & Tasks::ReloadWDTask, this)) {
-=======
+        cerr << "Error task start: " << strerror(-err) << endl << flush;
+        exit(EXIT_FAILURE);
+    }
     if (err = rt_task_start(&th_checkBat, (void(*)(void*)) & Tasks::CheckBat, this)) {
         cerr << "Error task start: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
@@ -237,7 +235,6 @@ void Tasks::Run() {
 // ***FONCTIONNALITE 14*** //
 // *********************** //
     if (err = rt_task_start(&th_startCamera, (void(*)(void*)) & Tasks::StartCameraTask, this)) {
->>>>>>> Romain
         cerr << "Error task start: " << strerror(-err) << endl << flush;
         exit(EXIT_FAILURE);
     }
@@ -337,14 +334,7 @@ void Tasks::ReceiveFromMonTask(void *arg) {
         msgRcv = monitor.Read();
         cout << endl << "Rcv <= " << msgRcv->ToString() << endl << flush;
 
-<<<<<<< HEAD
-        if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {
-=======
-// ************************* //
-// ***FONCTIONNALITES 5/6*** //
-// ************************* //
         if (msgRcv->CompareID(MESSAGE_MONITOR_LOST)) {  // Connexion perdue avec le monitor
->>>>>>> Romain
             delete(msgRcv);
 
             // Stopper le Robot
@@ -433,6 +423,7 @@ void Tasks::OpenComRobot(void *arg) {
  * @brief Thread starting the communication with the robot without WD.
  */
 void Tasks::StartRobotTask(void *arg) {
+    int com;
     cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
     // Synchronization barrier (waiting that all tasks are starting)
     rt_sem_p(&sem_barrier, TM_INFINITE);
@@ -477,6 +468,7 @@ void Tasks::StartRobotTask(void *arg) {
  * @brief Thread starting the communication with the robot with WD.
  */
 void Tasks::StartRobotWDTask(void *arg) {
+    int com;
     cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
     // Synchronization barrier (waiting that all tasks are starting)
     rt_sem_p(&sem_barrier, TM_INFINITE);
@@ -489,6 +481,13 @@ void Tasks::StartRobotWDTask(void *arg) {
         Message * msgSend;
         rt_sem_p(&sem_startRobotWD, TM_INFINITE);
         cout << "Start robot with watchdog (";
+        rt_mutex_acquire(&mutex_ComRobotEtablie, TM_INFINITE);
+        com=ComRobotEtablie;
+        rt_mutex_release(&mutex_ComRobotEtablie);
+        if (com==0)
+        {
+            rt_sem_v(&sem_openComRobot);  
+        }
         rt_mutex_acquire(&mutex_robot, TM_INFINITE);
         msgSend = robot.Write(robot.StartWithWD());
         rt_mutex_release(&mutex_robot);
@@ -590,7 +589,6 @@ void Tasks::MoveTask(void *arg) {
     }
 }
 
-<<<<<<< HEAD
 /**
  * Write a message in a given queue
  * @param queue Queue identifier
@@ -625,12 +623,7 @@ Message *Tasks::ReadInQueue(RT_QUEUE *queue) {
 
 
 
-// *********************** //
-// ***FONCTIONNALITE 14*** //
-// *********************** //
-=======
 
->>>>>>> Romain
 void Tasks::StartCameraTask(void* arg) {
     /*cout << "Start " << __PRETTY_FUNCTION__ << endl << flush;
     // Synchronization barrier (waiting that all tasks are starting)
@@ -715,36 +708,3 @@ void Tasks::CommRobLost (void *arg){
     }
     
 }
-
-/**
- * Write a message in a given queue
- * @param queue Queue identifier
- * @param msg Message to be stored
- */
-void Tasks::WriteInQueue(RT_QUEUE *queue, Message *msg) {
-    int err;
-    if ((err = rt_queue_write(queue, (const void *) &msg, sizeof ((const void *) &msg), Q_NORMAL)) < 0) {
-        cerr << "Write in queue failed: " << strerror(-err) << endl << flush;
-        throw std::runtime_error{"Error in write in queue"};
-    }
-}
-
-/**
- * Read a message from a given queue, block if empty
- * @param queue Queue identifier
- * @return Message read
- */
-Message *Tasks::ReadInQueue(RT_QUEUE *queue) {
-    int err;
-    Message *msg;
-
-    if ((err = rt_queue_read(queue, &msg, sizeof ((void*) &msg), TM_INFINITE)) < 0) {
-        cout << "Read in queue failed: " << strerror(-err) << endl << flush;
-        throw std::runtime_error{"Error in read in queue"};
-    }/** else {
-        cout << "@msg :" << msg << endl << flush;
-    } /**/
-
-    return msg;
-}
-
