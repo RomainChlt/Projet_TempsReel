@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=GNU-None
 CND_DLIB_EXT=so
 CND_CONF=Debug__RPI_
 CND_DISTDIR=dist
